@@ -1,9 +1,10 @@
 # parsetime
 
-[![Build Status](https://travis-ci.org/tkuchiki/parsetime.svg?branch=master)](https://travis-ci.org/tkuchiki/parsetime)
-[![Coverage Status](https://coveralls.io/repos/tkuchiki/parsetime/badge.svg?branch=master&service=github)](https://coveralls.io/github/tkuchiki/parsetime?branch=master)
-
 date/time parser for golang
+
+* This is a fork of https://github.com/tkuchiki/parsetime
+* Changes documented here:
+* * https://github.com/tkuchiki/parsetime/pull/4
 
 ## Usage
 
@@ -16,7 +17,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/tkuchiki/parsetime"
+	"github.com/jftuga/parsetime"
 	"log"
 )
 

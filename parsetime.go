@@ -10,7 +10,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/tkuchiki/go-timezone"
+	"github.com/jftuga/go-timezone"
 )
 
 var (
