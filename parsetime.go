@@ -645,6 +645,50 @@ func (pt *ParseTime) RFC8xx1123(value string) (time.Time, error) {
 	return t, err
 }
 
+// isISO8601Format detects whether a string resembles an ISO8601 timestamp by checking
+// for specific formatting characteristics. It performs a basic structural validation
+// by ensuring:
+//   - The string contains both 'T' (time delimiter) and 'Z' (UTC timezone indicator)
+//   - Digits exist immediately before and after the 'T'
+//   - A digit exists before the 'Z'
+//   - 'Z' appears as the last character in the string
+//
+// This function is intended for basic format detection to guide users toward the
+// appropriate parser and should not be used for full ISO8601 validation.
+//
+// Returns true if the string matches these basic ISO8601 characteristics,
+// false otherwise.
+func isISO8601Format(value string) bool {
+	// Check if T and Z exist at all
+	tIndex := strings.IndexByte(value, 'T')
+	zIndex := strings.IndexByte(value, 'Z')
+
+	// Early return if either character is missing
+	if tIndex == -1 || zIndex == -1 {
+		return false
+	}
+
+	// Check if Z is the last character
+	if zIndex != len(value)-1 {
+		return false
+	}
+
+	// Check for digits around T and before Z
+	if tIndex == 0 || tIndex == len(value)-1 { // T can't be first or last
+		return false
+	}
+
+	beforeT := value[tIndex-1]
+	afterT := value[tIndex+1]
+	beforeZ := value[zIndex-1]
+
+	return isDigit(beforeT) && isDigit(afterT) && isDigit(beforeZ)
+}
+
+func isDigit(c byte) bool {
+	return c >= '0' && c <= '9'
+}
+
 // parseANSIC parses a date string in ANSI C format (example: "Mon Jan _2 15:04:05 2006") and returns
 // a time.Time value along with a priority value indicating match specificity. The function supports
 // optional timezone information.
@@ -687,8 +731,12 @@ func parseANSIC(value string, loc *time.Location) (time.Time, int, error) {
 	var err error
 	var priority int
 
-	group := reANSIC.FindStringSubmatch(value)
+	// if value resembles ISO8601, reject it
+	if isISO8601Format(value) {
+		return time.Time{}, 0, fmt.Errorf("looks like ISO8601 format, use ISO8601 parser instead")
+	}
 
+	group := reANSIC.FindStringSubmatch(value)
 	if len(group) == 0 {
 		return t, priority, errInvalidDateTime
 	}
