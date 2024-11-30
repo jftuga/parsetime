@@ -6,7 +6,7 @@ import (
 
 const (
 	year         = `(2[0-9]{3}|19[7-9][0-9])`
-	month        = `(1[012]|0?[1-9])`
+	month        = `(0[1-9]|1[012])` // Ensures month is between 01-12, enforcing zero-padding
 	day          = `([12][0-9]|3[01]|0?[1-9])`
 	hour         = `(2[0-3]|[01]?[0-9])`
 	min          = `([0-5]?[0-9])`
