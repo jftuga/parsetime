@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/crackcomm/go-clitable"
-	"github.com/tkuchiki/parsetime"
+	"github.com/jftuga/parsetime"
 	"log"
 )
 
